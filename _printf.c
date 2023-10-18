@@ -18,22 +18,24 @@ int _printf(const char *format, ...)
 	va_list v_x;
 	int i = 0;
 	int n = 0; /* number of characters printed */
+	char c;
 
 	va_start(v_x, format);
 	while (format && format[i])
 	{
-		if (format[i] = '%')
+		if (format[i] == '%')
 		{
 			i++;
-			if (format[i] = 'c')
+			if (format[i] == 'c')
 			{
-				write(1, (char[]){va_arg(v_x, int)}, 1);
+				c = va_arg(v_x, int);
+				write(1, &c, 1);
 			}
-			else if (format[i] = 's')
+			else if (format[i] == 's')
 			{
-				write(1, va_arg(v_x, char *), strlen(va_arg(v_x, char *));
+				write(1, va_arg(v_x, char *), strlen(va_arg(v_x, char *)));
 			}
-			else if (format[i] = '%')
+			else if (format[i] == '%')
 			{
 				write(1, "%", 1);
 			}

@@ -22,24 +22,24 @@ int _printf(const char *format, ...)
 	va_start(v_x, format);
 	while (format && format[i])
 	{
-		switch (format[i])
+		if (format[i] = '%')
 		{
-			case '%':
-				i++;
-				switch (format[i])
-				{
-					case 'c':
-						write(1, (char[]){va_arg(v_x, int)}, 1);
-						break;
-					case 's':
-						write(1, va_arg(v_x, char *), strlen(va_arg(v_x, char *));
-						break;
-					case '%':
-						write(1, "%", 1);
-						break;
-				}
-				break;
-		default:
+			i++;
+			if (format[i] = 'c')
+			{
+				write(1, (char[]){va_arg(v_x, int)}, 1);
+			}
+			else if (format[i] = 's')
+			{
+				write(1, va_arg(v_x, char *), strlen(va_arg(v_x, char *));
+			}
+			else if (format[i] = '%')
+			{
+				write(1, "%", 1);
+			}
+		}
+		else
+		{
 			write(1, &format[i], 1);
 		}
 		n++;

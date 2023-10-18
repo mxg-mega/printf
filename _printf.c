@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdio.h>
 
 /**
  * _printf - prints formatted string, doesn't; handle the flag chara-
@@ -19,6 +20,7 @@ int _printf(const char *format, ...)
 	int i = 0;
 	int n = 0; /* number of characters printed */
 	char c;
+	char *str;
 
 	va_start(v_x, format);
 	while (format && format[i])
@@ -33,11 +35,20 @@ int _printf(const char *format, ...)
 			}
 			else if (format[i] == 's')
 			{
-				write(1, va_arg(v_x, char *), strlen(va_arg(v_x, char *)));
+				str = va_arg(v_x, char *);
+				if (str)
+				{
+				write(1, str, strlen(str));
+				}
 			}
 			else if (format[i] == '%')
 			{
 				write(1, "%", 1);
+			}
+			else
+			{
+				perror("Error: Unexpected format specifier.");
+				exit(98);
 			}
 		}
 		else

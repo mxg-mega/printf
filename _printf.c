@@ -53,12 +53,11 @@ int _printf(const char *format, ...)
 				u = va_arg(v_x, unsigned int);
 				for (i = 31 ; i >= 0 ; i--)
 				{
-					str3[i] = (u & 1) + '0';
-					u >>= 1;
+					str3[ul++] = (u & (1 << i)) ? '1' : '0';
 				}
-				str3[32] = '\0';
-				write(1, str3, 32);
-				n += 32;
+				str3[ul] = '\0';
+				write(1, str3, ul);
+				n += ul;
 			}
 			else
 			{

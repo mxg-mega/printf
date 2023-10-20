@@ -16,9 +16,13 @@ int _printf(const char *format, ...)
 	char c;
 	char *str;
 
+	if (format != NULL)
+	{
+		return (0);
+	}
 	va_start(v_x, format);
 
-	while (format != NULL && format[i])
+	while (format && format[i])
 	{
 		if (format[i] == '%')
 		{
@@ -31,7 +35,7 @@ int _printf(const char *format, ...)
 			else if (format[i] == 's')
 			{
 				str = va_arg(v_x, char *);
-				if (str != NULL)
+				if (str)
 				{
 					write(1, str, _strlen(str));  /* Send string to stdout */
 				}

@@ -13,4 +13,4 @@ int write_int(int n);
 int write_str(char *str);
 int write_char(char c);
 
-#endif
+#endif /*_MAIN_H_*/

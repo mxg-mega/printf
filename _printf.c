@@ -11,8 +11,8 @@
 int _printf(const char *format, ...)
 {
 	va_list v_x;
-	int n = 0, u, ul; /* Number of characters printed */
-	char *str, str2[20];
+	int n = 0, u, ul, i; /* Number of characters printed */
+	char *str, str2[20], str3[33];
 
 	va_start(v_x, format);
 
@@ -24,17 +24,8 @@ int _printf(const char *format, ...)
 			if (*format == 'c')
 			{
 				char c = va_arg(v_x, int);
-				if (c)
-				{
-					write(1, &c, 1); /* Send character to stdout */
-					n++;
-				}
-				else
-				{
-					c = ' ';
-					write(1, &c, 1);
-					n++;
-				}
+				write(1, &c, 1); /* Send character to stdout */
+				n++;
 			}
 			else if (*format == 's')
 			{
@@ -42,14 +33,8 @@ int _printf(const char *format, ...)
 				if (str)
 				{
 					write(1, str, _strlen(str)); /* Send string to stdout */
-					n += _strlen(str);
 				}
-				else
-				{
-					str = "(nil)";
-					write(1, str, _strlen(str));
-					n +=_strlen(str);
-				}
+				n += _strlen(str);
 			}
 			else if (*format == '%')
 			{
@@ -62,6 +47,18 @@ int _printf(const char *format, ...)
 				ul = sprintf(str2, "%d", u);
 				write(1, str2, ul);
 				n += ul;
+			}
+			else if (*format == 'b')
+			{
+				u = va_arg(v_x, unsigned int);
+				for (i = 31 ; i >= 0 ; i--)
+				{
+					str3[i] = (u & 1) + '0';
+					u >>= 1;
+				}
+				str3[32] = '\0';
+				write(1, str3, 32);
+				n += 32;
 			}
 			else
 			{

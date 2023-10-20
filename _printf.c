@@ -25,6 +25,7 @@ int _printf(const char *format, ...)
 			{
 				c = va_arg(v_x, int);
 				write(1, &c, 1);  /* Send character to stdout */
+				n++
 			}
 			else if (*format == 's')
 			{
@@ -33,10 +34,12 @@ int _printf(const char *format, ...)
 				{
 					write(1, str, _strlen(str));  /* Send string to stdout */
 				}
+				n += _strlen(str);
 			}
 			else if (*format == '%')
 			{
 				write(1, "%", 1);  /* Send '%' to stdout */
+				n++;
 			}
 			else
 			{
@@ -47,6 +50,7 @@ int _printf(const char *format, ...)
 		else
 		{
 			write(1, format, 1);  /* Send character to stdout */
+			n++;
 		}
 		format++;
 	}

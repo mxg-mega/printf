@@ -2,6 +2,6 @@
 
 int main(void)
 {
-	_printf("%% %c %s\n", 'c', "muhammad");
+	_printf("%% uhdsliugh %c %s ufdhil\n", 'c', "muhammad");
 	return (0);
 }

@@ -61,7 +61,6 @@ void handle_format_specifier(char format, va_list v_x, char **buffer, int *buffl
 			(*buffer)[*bufflen] = '%';
 			(*bufflen)++;
 			break;
-		case 'd':
 		default:
 			write(1, "Error: Unexpected format specifier.", 33);
 		exit(98);

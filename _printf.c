@@ -23,9 +23,9 @@ int _printf(const char *format, ...)
 			format++;
 			if (*format == 'c')
 			{
-				c = va_arg(v_x, int);
+				char c = va_arg(v_x, int);
 				write(1, &c, 1);  /* Send character to stdout */
-				n++
+				n++;
 			}
 			else if (*format == 's')
 			{

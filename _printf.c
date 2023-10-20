@@ -7,15 +7,16 @@
 
 int _printf(const char *format, ...)
 {
-    va_list v_x;
-    int i = 0;
-    int n = 0, len; 
-    char *output = NULL; 
+	int n = 0;
+	int i, len;
     int output_size = 0;
-    char c, *str; 
-
+    char *output = NULL, *str, c;
+    
+    va_list v_x;
     va_start(v_x, format);
-    while (format && format[i])
+
+    
+    for (i = 0; format && format[i]; i++)
     {
         if (format[i] == '%')
         {
@@ -23,14 +24,13 @@ int _printf(const char *format, ...)
             if (format[i] == 'c')
             {
                 c = va_arg(v_x, int);
-                output = (char *)malloc(output_size + 2); 
+                output = (char *)realloc(output, output_size + 2);
                 if (output == NULL) {
                     perror("Error: Memory allocation failed.");
                     exit(1);
                 }
                 output[output_size] = c;
-                output[output_size + 1] = '\0';
-                output_size += 2;
+                output_size++;
             }
             else if (format[i] == 's')
             {
@@ -38,7 +38,7 @@ int _printf(const char *format, ...)
                 if (str)
                 {
                     len = strlen(str);
-                    output = (char *)malloc(output_size + len + 1); 
+                    output = (char *)realloc(output, output_size + len + 1);
                     if (output == NULL) {
                         perror("Error: Memory allocation failed.");
                         exit(1);
@@ -49,14 +49,13 @@ int _printf(const char *format, ...)
             }
             else if (format[i] == '%')
             {
-                output = (char *)malloc(output_size + 2); 
+                output = (char *)realloc(output, output_size + 2);
                 if (output == NULL) {
                     perror("Error: Memory allocation failed.");
                     exit(1);
                 }
                 output[output_size] = '%';
-                output[output_size + 1] = '\0';
-                output_size += 2;
+                output_size++;
             }
             else
             {
@@ -66,25 +65,21 @@ int _printf(const char *format, ...)
         }
         else
         {
-            output = (char *)malloc(output_size + 2); 
+            output = (char *)realloc(output, output_size + 2);
             if (output == NULL) {
                 perror("Error: Memory allocation failed.");
                 exit(1);
             }
             output[output_size] = format[i];
-            output[output_size + 1] = '\0';
-            output_size += 2;
+            output_size++;
         }
-        i++;
     }
+
     va_end(v_x);
 
-    
-    write(1, output, output_size - 1); 
+    write(1, output, output_size);
 
-    
     free(output);
 
     return n;
 }
-

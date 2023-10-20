@@ -1,6 +1,4 @@
 #include "main.h"
-#include <stdarg.h>
-#include <unistd.h>
 
 /**
  * _printf - prints formatted string.
@@ -12,6 +10,7 @@ int _printf(const char *format, ...)
 {
 	va_list v_x;
 	int n = 0;  /* Number of characters printed */
+	int int_arg;
 	char *str;
 
 	va_start(v_x, format);
@@ -20,37 +19,32 @@ int _printf(const char *format, ...)
 	{
 		if (*format == '%')
 		{
-			format++;
-			if (*format == 'c')
+			format++; /* Move to the format specifier character */
+			switch (*format)
 			{
-				char c = va_arg(v_x, int);
-				write(1, &c, 1);  /* Send character to stdout */
-				n++;
-			}
-			else if (*format == 's')
-			{
-				str = va_arg(v_x, char *);
-				if (str)
-				{
-					write(1, str, _strlen(str));  /* Send string to stdout */
-				}
-				n += _strlen(str);
-			}
-			else if (*format == '%')
-			{
-				write(1, "%", 1);  /* Send '%' to stdout */
-				n++;
-			}
-			else
-			{
-				write(1, "Error: Unexpected format specifier.", 33);
-				exit(98);
+				case 'c':
+					n += write_char(va_arg(v_x, int));
+					break;
+				case 's':
+					str = va_arg(v_x, char *);
+					n += write_str(str);
+					break;
+				case 'd':
+				case 'i':
+					int_arg = va_arg(v_x, int);
+					n += write_int(int_arg);
+					break;
+				case '%':
+					n += write_percent();
+					break;
+				default:
+					n += write_error();
+					break;
 			}
 		}
 		else
 		{
-			write(1, format, 1);  /* Send character to stdout */
-			n++;
+			n += write_char(*format);
 		}
 		format++;
 	}
@@ -58,20 +52,5 @@ int _printf(const char *format, ...)
 	va_end(v_x);
 
 	return (n);
-}
-
-/**
- * _strlen - Calculate the length of a string.
- * @str: The input string.
- * Return: The length of the string.
- */
-int _strlen(const char *str)
-{
-	int len = 0;
-	while (str[len] != '\0')
-	{
-		len++;
-	}
-	return (len);
 }
 

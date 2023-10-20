@@ -31,7 +31,7 @@ int _printf(const char *format, ...)
 			else if (format[i] == 's')
 			{
 				str = va_arg(v_x, char *);
-				if (str)
+				if (str != NULL)
 				{
 					write(1, str, _strlen(str));  /* Send string to stdout */
 				}
@@ -56,7 +56,7 @@ int _printf(const char *format, ...)
 
 	va_end(v_x);
 
-	return n;
+	return (n);
 }
 
 /**
@@ -71,6 +71,6 @@ int _strlen(const char *str)
 	{
 		len++;
 	}
-	return len;
+	return (len);
 }
 

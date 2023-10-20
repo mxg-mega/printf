@@ -64,18 +64,3 @@ int _printf(const char *format, ...)
 	return (n);
 }
 
-/**
- * _strlen - Calculate the length of a string.
- * @str: The input string.
- * Return: The length of the string.
- */
-int _strlen(const char *str)
-{
-	int len = 0;
-	while (str[len] != '\0')
-	{
-		len++;
-	}
-	return (len);
-}
-

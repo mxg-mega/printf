@@ -23,8 +23,17 @@ int _printf(const char *format, ...)
 			if (*format == 'c')
 			{
 				char c = va_arg(v_x, int);
-				write(1, &c, 1); /* Send character to stdout */
-				n++;
+				if (c != NULL)
+				{
+					write(1, &c, 1); /* Send character to stdout */
+					n++;
+				}
+				else
+				{
+					c = ' ';
+					write(1, &c, 1);
+					n++;
+				}
 			}
 			else if (*format == 's')
 			{
@@ -32,8 +41,14 @@ int _printf(const char *format, ...)
 				if (str)
 				{
 					write(1, str, _strlen(str)); /* Send string to stdout */
+					n += _strlen(str);
 				}
-				n += _strlen(str);
+				else
+				{
+					str = "(nil)";
+					write(1, str, _strlen(str));
+					n +=_strlen(str);
+				}
 			}
 			else if (*format == '%')
 			{

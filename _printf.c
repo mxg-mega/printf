@@ -10,60 +10,55 @@
  */
 int _printf(const char *format, ...)
 {
-	va_list v_x;
-	int n = 0, u, ul, i; /* Number of characters printed */
-	char *str, str2[20], str3[33];
+va_list args;
+	int i = 0;
+	int n = 0;  /* Number of characters printed */
 
-	va_start(v_x, format);
+	va_start(args, format);
 
-	while (*format)
+	while (format && format[i])
 	{
-		if (*format == '%')
+		if (format[i] == '%')
 		{
-			format++;
-			if (*format == 'c')
+			i++;
+			if (format[i] == 'c')
 			{
-				char c = va_arg(v_x, int);
-				write(1, &c, 1); /* Send character to stdout */
-				n++;
+				char c = va_arg(args, int);
+				write(1, &c, 1);
 			}
-			else if (*format == 's')
+			else if (format[i] == 's')
 			{
-				str = va_arg(v_x, char *);
+				char *str = va_arg(args, char *);
 				if (str)
 				{
-					write(1, str, _strlen(str)); /* Send string to stdout */
+					int len = 0;
+					while (str[len] != '\0')
+					{
+						len++;
+					}
+					write(1, str, len);
 				}
-				n += _strlen(str);
 			}
-			else if (*format == '%')
+			else if (format[i] == '%')
 			{
-				write(1, "%", 1); /* Send '%' to stdout */
-				n++;
-			}
-			else if (*format == 'd' || *format == 'i')
-			{
-				u = va_arg(v_x, int);
-				ul = sprintf(str2, "%d", u);
-				write(1, str2, ul);
-				n += ul;
+				write(1, "%", 1);
 			}
 			else
 			{
 				write(1, "Error: Unexpected format specifier.", 33);
-				exit(98);
+				return -1;  /* Return an error code */
 			}
 		}
 		else
 		{
-			write(1, format, 1); /* Send character to stdout */
-			n++;
+			write(1, &format[i], 1);
 		}
-		format++;
+		n++;
+		i++;
 	}
 
-	va_end(v_x);
+	va_end(args);
 
-	return (n);
+	return (n);	
 }
 

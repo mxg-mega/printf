@@ -1,85 +1,53 @@
 #include "main.h"
 #include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
 
+/**
+ * _printf - custom implementation of `printf`
+ * @format: pointer to the string provided to the function.
+ * @...: variable number of arguments
+ * <for now> , only handles '%c', '%s' n '%%'
+ * Return: number of characters printed.
+ */
 int _printf(const char *format, ...)
 {
-	int n = 0;
-	int i, len;
-    int output_size = 0;
-    char *output = NULL, *str, c;
-    
-    va_list v_x;
-    va_start(v_x, format);
+	int n = 0, c; /* n: No. of chars printed */
+	char *s1;
+	va_list a;
 
-    
-    for (i = 0; format && format[i]; i++)
-    {
-        if (format[i] == '%')
-        {
-            i++;
-            if (format[i] == 'c')
-            {
-                c = va_arg(v_x, int);
-                output = (char *)realloc(output, output_size + 2);
-                if (output == NULL) {
-                    perror("Error: Memory allocation failed.");
-                    exit(1);
-                }
-                output[output_size] = c;
-                output_size++;
-            }
-            else if (format[i] == 's')
-            {
-                str = va_arg(v_x, char *);
-                if (str)
-                {
-                    len = strlen(str);
-                    output = (char *)realloc(output, output_size + len + 1);
-                    if (output == NULL) {
-                        perror("Error: Memory allocation failed.");
-                        exit(1);
-                    }
-                    strcpy(output + output_size, str);
-                    output_size += len;
-                }
-            }
-            else if (format[i] == '%')
-            {
-                output = (char *)realloc(output, output_size + 2);
-                if (output == NULL) {
-                    perror("Error: Memory allocation failed.");
-                    exit(1);
-                }
-                output[output_size] = '%';
-                output_size++;
-            }
-            else
-            {
-                perror("Error: Unexpected format specifier.");
-                exit(98);
-            }
-        }
-        else
-        {
-            output = (char *)realloc(output, output_size + 2);
-            if (output == NULL) {
-                perror("Error: Memory allocation failed.");
-                exit(1);
-            }
-            output[output_size] = format[i];
-            output_size++;
-        }
-    }
-
-    va_end(v_x);
-
-    write(1, output, output_size);
-
-    free(output);
-
-    return n;
+	va_start(a, format);
+	while (*format)
+	{
+		if (*format != '%')
+		{
+			write (1, format, 1);
+			n++;
+		}
+		else
+		{
+			format++;
+			if (*format == 'c')
+			{
+				c = va_arg(a, int);
+				write(1, &c, 1);
+				n++;
+			}
+			else if (*format == 's')
+			{
+				s1 = va_arg(a, char *);
+				write(1, s1, strlen(s1));
+				n += strlen(s1);
+			}
+			else if (*format == '%')
+			{
+				write(1, "%", 1);
+				n++;
+			}
+		}
+		format++;
+	}
+	va_end(a);
+	return (n);
 }

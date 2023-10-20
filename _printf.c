@@ -3,6 +3,70 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stddef.h>
+
+void resize(unsigned int increase, int *bufflen, char **buffer)
+{
+	unsigned int newSize = *bufflen * increase + 1;
+	*buffer = realloc(*buffer, newSize);
+	if (!*buffer)
+	{
+		perror("Memory allocation failed");
+		exit(1);
+	}
+}
+/**
+ * handle_format_specifier - Handle format specifier character.
+ * @format: format character ('c', 's', or '%').
+ * @v_x: va_list containing the variable arguments.
+ * @buffer: Pointer to the buffer for output.
+ * @bufflen: Current length of the buffer.
+ */
+void handle_format_specifier(char format, va_list v_x, char **buffer, int *bufflen)
+{
+	char c;
+	char *str;
+
+	switch (format)
+	{
+		case 'c':
+			c = va_arg(v_x, int);
+			if (*bufflen + 1 >= **buffer)
+			{
+				resize(2, bufflen, buffer);
+			}
+			(*buffer)[*bufflen] = c;
+			(*bufflen)++;
+			break;
+		case 's':
+			str = va_arg(v_x, char *);
+			if (str)
+			{
+				int strLen = strlen(str);
+
+				if (*bufflen + strLen >= *bufflen)
+				{
+					resize(strLen, bufflen, buffer);
+				}
+				strcpy(*buffer + *bufflen, str);
+				*bufflen += strLen;
+			}
+			break;
+		case '%':
+			if (*bufflen + 1 >= *bufflen)
+			{
+				resize(2, bufflen, buffer);
+			}
+			(*buffer)[*bufflen] = '%';
+			(*bufflen)++;
+			break;
+		case 'd':
+		default:
+			write(1, "Error: Unexpected format specifier.", 33);
+		exit(98);
+	}
+}
 
 /**
  * _printf - custom implementation of `printf`
@@ -13,48 +77,45 @@
  */
 int _printf(const char *format, ...)
 {
-	int n = 0, c, u, ul; /* n: No. of chars printed */
-	char *s1, s2[12];
-	va_list a;
+	va_list v_x;
+	int i = 0;
+	int n = 0;       /* Number of characters printed */
+	char *buffer = NULL;  /* Initialize the buffer to NULL */
+	int bufflen = 0;      /* Length of the buffer */
 
-	va_start(a, format);
-	while (*format)
+	va_start(v_x, format);
+	while (format && format[i])
 	{
-		if (*format != '%')
+		if (format[i] == '%')
 		{
-			write(1, format, 1);
-			n++;
+			i++;
+			handle_format_specifier(format[i], v_x, &buffer, &bufflen);
 		}
 		else
 		{
-			format++;
-			if (*format == 'c')
+			if (bufflen + 1 >= i)
 			{
-				c = va_arg(a, int);
-				write(1, &c, 1);
-				n++;
+				int newSize;
+
+				newSize = bufflen * 2 + 1;
+				buffer = realloc(buffer, newSize);
+				if (!buffer)
+				{
+					perror("Memory allocation failed");
+					exit(1);
+				}
 			}
-			else if (*format == 's')
-			{
-				s1 = va_arg(a, char *);
-				write(1, s1, strlen(s1));
-				n += strlen(s1);
-			}
-			else if (*format == '%')
-			{
-				write(1, "%", 1);
-				n++;
-			}
-			else if (*format == 'd' || *format == 'i')
-			{
-				u = va_arg(a, int);
-				ul = sprintf(s2, "%d", u);
-				write(1, s2, ul);
-				n += ul;
-			}
+			buffer[bufflen] = format[i];
+			bufflen++;
 		}
-		format++;
+		i++;
 	}
-	va_end(a);
+	va_end(v_x);
+	if (buffer)
+	{
+		buffer[bufflen] = '\0';
+		write(1, buffer, bufflen);
+		free(buffer);
+	}
 	return (n);
 }

@@ -23,7 +23,7 @@ int _printf(const char *format, ...)
 			if (*format == 'c')
 			{
 				char c = va_arg(v_x, int);
-				if (c != NULL)
+				if (c)
 				{
 					write(1, &c, 1); /* Send character to stdout */
 					n++;

@@ -13,8 +13,8 @@
  */
 int _printf(const char *format, ...)
 {
-	int n = 0, c; /* n: No. of chars printed */
-	char *s1;
+	int n = 0, c, u, ul; /* n: No. of chars printed */
+	char *s1, s2[12];
 	va_list a;
 
 	va_start(a, format);
@@ -44,6 +44,13 @@ int _printf(const char *format, ...)
 			{
 				write(1, "%", 1);
 				n++;
+			}
+			else if (*format == 'd' || *format == 'i')
+			{
+				u = va_arg(a, int);
+				ul = sprintf(s2, "%d", u);
+				write(1, s2, ul);
+				n += ul;
 			}
 		}
 		format++;

@@ -10,38 +10,43 @@
  */
 int _printf(const char *format, ...)
 {
-va_list args;
-	int i = 0;
+	va_list args;
 	int n = 0;  /* Number of characters printed */
 
 	va_start(args, format);
 
-	while (format && format[i])
+	while (*format)
 	{
-		if (format[i] == '%')
+		if (*format != '%')
 		{
-			i++;
-			if (format[i] == 'c')
+			write(1, format, 1);
+			n++;
+		}
+		else
+		{
+			format++;
+			if (*format == 'c')
 			{
 				char c = va_arg(args, int);
 				write(1, &c, 1);
+				n++;
 			}
-			else if (format[i] == 's')
+			else if (*format == 's')
 			{
 				char *str = va_arg(args, char *);
 				if (str)
 				{
 					int len = 0;
-					while (str[len] != '\0')
-					{
+					while (str[len])
 						len++;
-					}
 					write(1, str, len);
+					n += len;
 				}
 			}
-			else if (format[i] == '%')
+			else if (*format == '%')
 			{
 				write(1, "%", 1);
+				n++;
 			}
 			else
 			{
@@ -49,12 +54,7 @@ va_list args;
 				return -1;  /* Return an error code */
 			}
 		}
-		else
-		{
-			write(1, &format[i], 1);
-		}
-		n++;
-		i++;
+		format++;
 	}
 
 	va_end(args);

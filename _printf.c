@@ -11,24 +11,22 @@
 int _printf(const char *format, ...)
 {
 	va_list v_x;
-	int i = 0;
 	int n = 0;  /* Number of characters printed */
-	char c;
 	char *str;
 
 	va_start(v_x, format);
 
-	while (format && format[i])
+	while (format && *format)
 	{
-		if (format[i] == '%')
+		if (*format == '%')
 		{
-			i++;
-			if (format[i] == 'c')
+			format++;
+			if (*format == 'c')
 			{
 				c = va_arg(v_x, int);
 				write(1, &c, 1);  /* Send character to stdout */
 			}
-			else if (format[i] == 's')
+			else if (*format == 's')
 			{
 				str = va_arg(v_x, char *);
 				if (str)
@@ -36,7 +34,7 @@ int _printf(const char *format, ...)
 					write(1, str, _strlen(str));  /* Send string to stdout */
 				}
 			}
-			else if (format[i] == '%')
+			else if (*format == '%')
 			{
 				write(1, "%", 1);  /* Send '%' to stdout */
 			}
@@ -48,10 +46,9 @@ int _printf(const char *format, ...)
 		}
 		else
 		{
-			write(1, &format[i], 1);  /* Send character to stdout */
+			write(1, format, 1);  /* Send character to stdout */
 		}
-		n++;
-		i++;
+		format++;
 	}
 
 	va_end(v_x);

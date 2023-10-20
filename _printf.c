@@ -48,17 +48,6 @@ int _printf(const char *format, ...)
 				write(1, str2, ul);
 				n += ul;
 			}
-			else if (*format == 'b')
-			{
-				u = va_arg(v_x, unsigned int);
-				for (i = 31 ; i >= 0 ; i--)
-				{
-					str3[ul++] = (u & (1 << i)) ? '1' : '0';
-				}
-				str3[ul] = '\0';
-				write(1, str3, ul);
-				n += ul;
-			}
 			else
 			{
 				write(1, "Error: Unexpected format specifier.", 33);

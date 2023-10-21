@@ -13,8 +13,11 @@ int _printf(const char *format, ...)
 	va_list args;
 	int n = 0;  /* Number of characters printed */
 
+	if (format == NULL)
+	{
+		return (-1);
+	}
 	va_start(args, format);
-
 	while (*format)
 	{
 		if (*format != '%')

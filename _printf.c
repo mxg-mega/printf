@@ -51,10 +51,14 @@ int _printf(const char *format, ...)
 				write(1, "%", 1);
 				n++;
 			}
+			else if(*format == '\0')
+			{
+				break;
+			}
 			else
 			{
 				write(1, "Error: Unexpected format specifier.", 33);
-				return -1;  /* Return an error code */
+				return (-1);  /* Return an error code */
 			}
 		}
 		format++;

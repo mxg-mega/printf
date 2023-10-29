@@ -45,6 +45,10 @@ int _printf(const char *format, ...)
 					write(1, str, len);
 					n += len;
 				}
+				else
+				{
+					write(1, ' ', 1);
+				}
 			}
 			else if (*format == '%')
 			{

@@ -47,7 +47,9 @@ int _printf(const char *format, ...)
 				}
 				else
 				{
-					write(1, ' ', 1);
+					char p = ' ';
+					write(1, &p, 1);
+					n++;
 				}
 			}
 			else if (*format == '%')

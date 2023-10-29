@@ -17,7 +17,9 @@ int _printf(const char *format, ...)
 	{
 		return (-1);
 	}
+
 	va_start(args, format);
+
 	while (*format)
 	{
 		if (*format != '%')
@@ -28,18 +30,27 @@ int _printf(const char *format, ...)
 		else
 		{
 			format++;
+
+			if (*format == '\0')
+			{
+				break;
+			}
+
 			if (*format == 'c')
 			{
 				char c = va_arg(args, int);
+
 				write(1, &c, 1);
 				n++;
 			}
 			else if (*format == 's')
 			{
 				char *str = va_arg(args, char *);
+
 				if (str != NULL)
 				{
 					int len = 0;
+
 					while (str[len])
 						len++;
 					write(1, str, len);
@@ -48,22 +59,21 @@ int _printf(const char *format, ...)
 				else
 				{
 					char p = ' ';
+
 					write(1, &p, 1);
 					n++;
 				}
 			}
-			else if (*format == '%')
+			else if (*format == '%' || *format == ' ')
 			{
 				write(1, "%", 1);
 				n++;
 			}
-			else if(*format == '\0')
-			{
-				break;
-			}
 			else
 			{
-				write(1, "Error: Unexpected format specifier.", 33);
+				char * errorMsg = "\nError: Unexpected format specifier.\n";
+
+				write(1, errorMsg, _strlen(errorMsg));
 				return (-1);  /* Return an error code */
 			}
 		}

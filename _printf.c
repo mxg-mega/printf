@@ -54,7 +54,7 @@ int _printf(const char *format, ...)
 					while (str[len])
 						len++;
 					write(1, str, len);
-					n += len - 1;
+					n += len;
 				}
 				else
 				{

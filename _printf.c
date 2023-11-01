@@ -74,7 +74,7 @@ int _printf(const char *format, ...)
 				char * errorMsg = "\nError: Unexpected format specifier.\n";
 
 				write(1, errorMsg, _strlen(errorMsg));
-				return (n);  /* Return an error code */
+				break;
 			}
 		}
 		format++;

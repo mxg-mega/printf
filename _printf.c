@@ -54,7 +54,7 @@ int _printf(const char *format, ...)
 					while (str[len])
 						len++;
 					write(1, str, len);
-					n += len;
+					n += len - 1;
 				}
 				else
 				{
@@ -81,6 +81,6 @@ int _printf(const char *format, ...)
 	}
 
 	va_end(args);
-	return (n - 1);
+	return (n);
 }
 

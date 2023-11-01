@@ -38,7 +38,7 @@ int _printf(const char *format, ...)
 
 			if (*format == 'c')
 			{
-				char c = va_arg(args, int);
+				char c = (char)va_arg(args, int);
 
 				write(1, &c, 1);
 				n++;
@@ -81,7 +81,6 @@ int _printf(const char *format, ...)
 	}
 
 	va_end(args);
-
-	return (n);	
+	return (n - 1);
 }
 

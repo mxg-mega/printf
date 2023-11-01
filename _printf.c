@@ -15,7 +15,7 @@ int _printf(const char *format, ...)
 
 	if (format == NULL)
 	{
-		return (-1);
+		return (0);
 	}
 
 	va_start(args, format);
@@ -74,7 +74,7 @@ int _printf(const char *format, ...)
 				char * errorMsg = "\nError: Unexpected format specifier.\n";
 
 				write(1, errorMsg, _strlen(errorMsg));
-				return (-1);  /* Return an error code */
+				return (n);  /* Return an error code */
 			}
 		}
 		format++;

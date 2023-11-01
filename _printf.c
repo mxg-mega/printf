@@ -36,14 +36,17 @@ int _printf(const char *format, ...)
 				break;
 			}
 
-			if (*format == 'c')
+			switch(*format)
+			{
+				case 'c':
 			{
 				char c = (char)va_arg(args, int);
 
 				write(1, &c, 1);
 				n++;
+				break;
 			}
-			else if (*format == 's')
+				case's':
 			{
 				char *str = va_arg(args, char *);
 
@@ -63,18 +66,22 @@ int _printf(const char *format, ...)
 					write(1, &p, 1);
 					n++;
 				}
+				break;
 			}
-			else if (*format == '%' || *format == ' ')
+				case '%':
+				case ' ':
 			{
 				write(1, "%", 1);
 				n++;
+				break;
 			}
-			else
+				default:
 			{
 				char * errorMsg = "\nError: Unexpected format specifier.\n";
 
 				write(1, errorMsg, _strlen(errorMsg));
 				break;
+			}
 			}
 		}
 		format++;

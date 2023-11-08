@@ -11,80 +11,59 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
+	char *p;
 	int n = 0;  /* Number of characters printed */
 
 	if (format == NULL)
 	{
-		return (0);
+                :x
 	}
 
 	va_start(args, format);
 
-	while (*format)
+	p = format;
+	while (*p)
 	{
-		if (*format != '%')
+		if (*p != '%')
 		{
 			write(1, format, 1);
 			n++;
+			continue;
 		}
-		else
+		switch(*++p)
 		{
-			format++;
-
-			if (*format == '\0')
+			case 'c':
 			{
-				break;
-			}
+				char c = va_arg(args, int);
 
-			switch(*format)
-			{
-				case 'c':
-			{
-				char c = (char)va_arg(args, int);
-
-				write(1, &c, 1);
+				putchar(c);
 				n++;
 				break;
 			}
-				case's':
+			case's':
 			{
-				char *str = va_arg(args, char *);
+				char *str;
+				int i;
 
-				if (str != NULL)
-				{
-					int len = 0;
-
-					while (str[len])
-						len++;
-					write(1, str, len);
-					n += len;
-				}
-				else
-				{
-					char p = ' ';
-
-					write(1, &p, 1);
-					n++;
-				}
+				for (str = va_arg(args, char *); *str; str++)
+					write(1, *str, 1);
+				n += strlen(str);
 				break;
 			}
-				case '%':
-				case ' ':
+			case '%':
+			case ' ':
 			{
 				write(1, "%", 1);
 				n++;
 				break;
 			}
-				default:
+			default:
 			{
-				char * errorMsg = "\nError: Unexpected format specifier.\n";
-
-				write(1, errorMsg, _strlen(errorMsg));
+				putchar(*p);
+				n++;
 				break;
 			}
-			}
 		}
-		format++;
 	}
 
 	va_end(args);

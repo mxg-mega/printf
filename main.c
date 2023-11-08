@@ -4,7 +4,9 @@
 int main(void)
 {
 	int a;
-	a = _printf("a\n");
+
+	a = _printf("%s\n", "mmm");
 	printf("%d\n", a);
-	return 0;
+	return (0);
 }
+

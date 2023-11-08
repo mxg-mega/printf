@@ -7,7 +7,7 @@
  */
 int write_char(char c)
 {
-	return write(1, &c, 1);
+	return (write(1, &c, 1));
 }
 
 /**
@@ -17,9 +17,15 @@ int write_char(char c)
  */
 int write_str(char *str)
 {
-	if (!str)
-		str = "(null)";
-	return write(1, str, _strlen(str));
+	int i, len;
+
+	if (str != NULL)
+	{
+		len = strlen(str);
+		for (i = 0; i < len; i++)
+			putchar(str[i]);
+	}
+	return (len);
 }
 
 /**
@@ -51,24 +57,24 @@ int write_int(int n)
 	while (length--)
 		write_char(buffer[length]);
 
-	return length;
+	return (length);
 }
 
 /**
  * write_percent - Write a percent sign to stdout.
  * Return: Number of characters written (always 1).
  */
-int write_percent()
+int write_percent(void)
 {
-	return write(1, "%", 1);
+	return (write(1, "%", 1));
 }
 
 /**
  * write_error - Write an error message to stdout.
  * Return: Number of characters written.
  */
-int write_error()
+int write_error(void)
 {
-	return write(1, "Error: Unexpected format specifier.", 33);
+	return (write(1, "Error: Unexpected format specifier.", 33));
 }
 

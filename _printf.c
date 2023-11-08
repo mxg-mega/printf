@@ -12,54 +12,60 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 	const char *p;
-	int n = 0;  /* Number of characters printed */
+	int n = 0;
+	int len = 0;
 
-	va_start(args, format);
-
-	for (p = format; *p; p++)
+	if (format == NULL)
 	{
-		if (*p != '%')
+		return (-1);
+	}
+	va_start(args, format);
+	for (p = format; p[n] != '\0'; n++)
+	{
+		if (p[n] == '%')
 		{
-			putchar(*p);
 			n++;
-			continue;
+			switch (p[n])
+			{
+				case 'c':
+				{
+					char c = va_arg(args, int);
+
+					putchar(c);
+					len++;
+					break;
+				}
+				case 's':
+				{
+					char *str;
+
+					str = va_arg(args, char *);
+					write_str(str);
+					len += strlen(str);
+					break;
+				}
+				case '%':
+				{
+					putchar('%');
+					len++;
+					break;
+				}
+				default:
+				{
+					putchar(p[n - 1]);
+					putchar(p[n]);
+					len += 2;
+					break;
+				}
+			}
 		}
-		switch(*++p)
+		else
 		{
-			case 'c':
-			{
-				char c = va_arg(args, int);
-
-				putchar(c);
-				n++;
-				break;
-			}
-			case's':
-			{
-				char *str;
-
-				for (str = va_arg(args, char *); *str; str++)
-					write(1, str, 1);
-
-				n += strlen(str);
-				break;
-			}
-			case '%':
-			{
-				write(1, "%", 1);
-				n++;
-				break;
-			}
-			default:
-			{
-				putchar(*p);
-				n++;
-				break;
-			}
+			putchar(p[n]);
+			len++;
 		}
 	}
-
 	va_end(args);
-	return (n);
+	return (len);
 }
 

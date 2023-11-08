@@ -11,22 +11,16 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
-	char *p;
+	const char *p;
 	int n = 0;  /* Number of characters printed */
-
-	if (format == NULL)
-	{
-                :x
-	}
 
 	va_start(args, format);
 
-	p = format;
-	while (*p)
+	for (p = format; *p; p++)
 	{
 		if (*p != '%')
 		{
-			write(1, format, 1);
+			putchar(*p);
 			n++;
 			continue;
 		}
@@ -43,15 +37,14 @@ int _printf(const char *format, ...)
 			case's':
 			{
 				char *str;
-				int i;
 
 				for (str = va_arg(args, char *); *str; str++)
-					write(1, *str, 1);
+					write(1, str, 1);
+
 				n += strlen(str);
 				break;
 			}
 			case '%':
-			case ' ':
 			{
 				write(1, "%", 1);
 				n++;

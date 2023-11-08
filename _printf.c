@@ -17,7 +17,7 @@ int _printf(const char *format, ...)
 
 	if (format == NULL)
 	{
-		return (-1);
+		return;
 	}
 	va_start(args, format);
 	for (p = format; p[n] != '\0'; n++)
@@ -40,6 +40,9 @@ int _printf(const char *format, ...)
 					char *str;
 
 					str = va_arg(args, char *);
+					if (str == NULL)
+						return;
+
 					write_str(str);
 					len += strlen(str);
 					break;
